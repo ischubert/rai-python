@@ -27,7 +27,7 @@ pip3 install --user jupyter
 
 
 ```
-git clone git@github.com:MarcToussaint/rai-python.git
+git clone git@github.com:ischubert/rai-python.git
 cd rai-python
 
 # skip the following if you have ssh authorization to github

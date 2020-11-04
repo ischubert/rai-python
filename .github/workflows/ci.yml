@@ -15,17 +15,18 @@ env:
   IMAGE_NAME: rai-python
 
 jobs:
-  # Build docker container
+  # Build docker image
   build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - name: Build docker file
+      - name: Build docker image
         run: |
           docker build . --file Dockerfile --tag $IMAGE_NAME --build-arg GITHUB_SHA=${GITHUB_SHA}
 
   # TODO add tests here
+  # make sure that action stops if test fails
   # test:
 
   # Push image to GitHub Packages.

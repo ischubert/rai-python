@@ -4,6 +4,10 @@ FROM tensorflow/tensorflow:latest-gpu
 
 # TODO mount volume for scratch?
 
+# make sure GITHUB_SHA is set
+ARG GITHUB_SHA
+RUN : ${GITHUB_SHA?"Need to set GITHUB_SHA"}
+
 # install git
 RUN apt-get update && \
     apt-get upgrade -y && \

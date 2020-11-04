@@ -1,7 +1,6 @@
 name: Docker build, test, push
 
-on:
-  push:
+on: [push]
     # TODO think about this in more detail
     # # Publish `$default-branch` as Docker `latest` image.
     # branches:
@@ -10,9 +9,6 @@ on:
     # # Publish `v1.2.3` tags as releases.
     # tags:
     #   - v*
-
-  # Run tests for any PRs.
-  pull_request:
 
 env:
   IMAGE_NAME: rai-python

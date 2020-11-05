@@ -1,12 +1,8 @@
-# Using tf-gpu image as base having Deep RL applications in mind
+# Using tf-gpu image as base for Deep RL applications of rai-python
 FROM tensorflow/tensorflow:latest-gpu
 # Digest:sha256:37c7db66cc96481ac1ec43af2856ef65d3e664fd7f5df6b5e54855149f7f8594
 
 # TODO mount volume for scratch?
-
-# # make sure GITHUB_SHA is set
-# ARG GITHUB_SHA
-# RUN : ${GITHUB_SHA?"Need to set GITHUB_SHA"}
 
 # install git
 RUN apt-get update && \
@@ -54,7 +50,8 @@ RUN ls -l $HOME/git/rai-python/
 RUN du -hs $HOME/git/rai-python/
 
 # install rai-python
-RUN make cleanAll
+RUN cd rai-python && \
+    make cleanAll
 RUN cd rai-python && \
     yes | make installUbuntuAll
 RUN cd rai-python && \

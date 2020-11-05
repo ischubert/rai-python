@@ -12,7 +12,7 @@ https://ipvs.informatik.uni-stuttgart.de/mlr/lgp/
 
 ## Quick Start
 
-### Run in rai-python docker container
+### Docker
 The fastest way to get started is to use the [rai-python docker containers](https://github.com/ischubert?tab=packages). The latest builds for each branch are available at
 ```
 docker pull docker.pkg.github.com/ischubert/rai-python/rai-python:$BRANCH_NAME

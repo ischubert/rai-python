@@ -4,9 +4,9 @@ FROM tensorflow/tensorflow:latest-gpu
 
 # TODO mount volume for scratch?
 
-# make sure GITHUB_SHA is set
-ARG GITHUB_SHA
-RUN : ${GITHUB_SHA?"Need to set GITHUB_SHA"}
+# # make sure GITHUB_SHA is set
+# ARG GITHUB_SHA
+# RUN : ${GITHUB_SHA?"Need to set GITHUB_SHA"}
 
 # install git
 RUN apt-get update && \
@@ -36,7 +36,6 @@ RUN git clone https://github.com/NVIDIAGameWorks/PhysX.git && \
     git checkout 3.4 && \
     cd PhysX_3.4/Source/compiler/linux64 && \
     make release
-
 RUN mkdir -p $HOME/opt/physx3.4/lib && \
     mkdir -p $HOME/opt/physx3.4/include/physx && \
     cd $HOME/git/PhysX && \
@@ -46,16 +45,16 @@ RUN mkdir -p $HOME/opt/physx3.4/lib && \
     cp -R PhysX_3.4/Include/* $HOME/opt/physx3.4/include/physx &&\
     cp -R PxShared/include/* $HOME/opt/physx3.4/include/physx && \
     rm -Rf $HOME/git/PhysX
+ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$HOME/opt/physx3.4/lib"
+
+# copy rai-python
+RUN mkdir -p $HOME/git/rai-python
+ADD . $HOME/git/rai-python/
+RUN ls -l $HOME/git/rai-python/
+RUN du -hs $HOME/git/rai-python/
 
 # install rai-python
-RUN git clone https://github.com/ischubert/rai-python.git && \
-    cd rai-python && \
-    git checkout $GITHUB_SHA && \
-    git config --file=.gitmodules submodule.rai.url https://github.com/MarcToussaint/rai.git && \
-    git config --file=.gitmodules submodule.rai-robotModels.url https://github.com/MarcToussaint/rai-robotModels.git && \
-    git submodule init && \
-    git submodule update
-RUN export TERM=xterm
+RUN make cleanAll
 RUN cd rai-python && \
     yes | make installUbuntuAll
 RUN cd rai-python && \
@@ -63,3 +62,6 @@ RUN cd rai-python && \
 
 # install pytest
 RUN pip install flake8 pytest
+
+RUN cd rai-python && \
+    git log -1

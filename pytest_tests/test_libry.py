@@ -7,7 +7,7 @@ import numpy as np
 sys.path.append(os.getenv("HOME") + '/git/rai-python/rai/rai/ry')
 
 
-def test_libry_import():
+def test_libry():
     """
     Test whether
     - libry can be imported from the expected $PATH
@@ -70,10 +70,12 @@ def test_libry_import():
     var_komo.setupConfigurations()
     var_komo.optimize()
 
-    var_sim = var_conf.simulation(ry.SimulatorEngine.physx, True)
+    var_sim = var_conf.simulation(ry.SimulatorEngine.physx, False)
     for _ in range(10):
         var_conf.setFrameState(x_start)
         var_sim.setState(frameState=x_start, frameVelocities=np.array([]))
         tau = .01
         for __ in range(0, 100):
             var_sim.step(np.array([1., 1., 1., 0., 0., 0., 0.]), tau)
+
+    assert False

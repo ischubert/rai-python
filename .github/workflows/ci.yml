@@ -2,52 +2,30 @@ name: Docker
 
 
 on: [push]
-# TODO think about this in more detail
-# # Publish `$default-branch` as Docker `latest` image.
-# branches:
-#   - $default-branch
-
-# # Publish `v1.2.3` tags as releases.
-# tags:
-#   - v*
 
 env:
   IMAGE_NAME: rai-python
 
 jobs:
   # Build docker image
-  build:
+  build-test-push:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Build docker image
+      - uses: actions/checkout@v1 # checks out triggering branch, v1 checks out submodules as well
+
+      - name: Build rai-python docker image
         run: |
-          docker build . --file Dockerfile --tag $IMAGE_NAME --build-arg GITHUB_SHA=${GITHUB_SHA}
-
-  # TODO add tests here
-  # make sure that action stops if test fails
-  # test:
-
-  # Push image to GitHub Packages.
-  # See also https://docs.docker.com/docker-hub/builds/
-  push:
-    # Ensure test job passes before pushing image.
-    needs: [build] #, test] # TODO wait for test as well
-
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Build image
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME --build-arg GITHUB_SHA=${GITHUB_SHA}
-
-      - name: Log into registry
+          docker build . --file Dockerfile --tag $IMAGE_NAME
+      
+      - name: Test rai-python docker image
+        run: |
+          docker run $IMAGE_NAME bash -c "cd /root/git/rai-python && pytest"
+      
+      - name: Log into registry (docker.pkg.github.com)
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-
-      - name: Push image
+      
+      - name: Push rai-python docker image
         run: |
           IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
           # Change all uppercase to lowercase
@@ -56,8 +34,6 @@ jobs:
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           # Strip "v" prefix from tag name
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "$default-branch" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION

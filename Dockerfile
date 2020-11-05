@@ -26,31 +26,28 @@ RUN mkdir $HOME/opt
 RUN echo $HOME/git
 WORKDIR $HOME/git
 
-# TODO comment back in
-# # install PHYSX
-# RUN git clone https://github.com/NVIDIAGameWorks/PhysX.git && \
-#     cd PhysX && \
-#     git checkout 3.4 && \
-#     cd PhysX_3.4/Source/compiler/linux64 && \
-#     make release
-# RUN mkdir -p $HOME/opt/physx3.4/lib && \
-#     mkdir -p $HOME/opt/physx3.4/include/physx && \
-#     cd $HOME/git/PhysX && \
-#     cp PhysX_3.4/Bin/linux64/* $HOME/opt/physx3.4/lib && \
-#     cp PhysX_3.4/Lib/linux64/* $HOME/opt/physx3.4/lib &&\
-#     cp PxShared/bin/linux64/* $HOME/opt/physx3.4/lib &&\
-#     cp -R PhysX_3.4/Include/* $HOME/opt/physx3.4/include/physx &&\
-#     cp -R PxShared/include/* $HOME/opt/physx3.4/include/physx && \
-#     rm -Rf $HOME/git/PhysX
-# ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$HOME/opt/physx3.4/lib"
+# install PHYSX
+RUN git clone https://github.com/NVIDIAGameWorks/PhysX.git && \
+    cd PhysX && \
+    git checkout 3.4 && \
+    cd PhysX_3.4/Source/compiler/linux64 && \
+    make release
+RUN mkdir -p $HOME/opt/physx3.4/lib && \
+    mkdir -p $HOME/opt/physx3.4/include/physx && \
+    cd $HOME/git/PhysX && \
+    cp PhysX_3.4/Bin/linux64/* $HOME/opt/physx3.4/lib && \
+    cp PhysX_3.4/Lib/linux64/* $HOME/opt/physx3.4/lib &&\
+    cp PxShared/bin/linux64/* $HOME/opt/physx3.4/lib &&\
+    cp -R PhysX_3.4/Include/* $HOME/opt/physx3.4/include/physx &&\
+    cp -R PxShared/include/* $HOME/opt/physx3.4/include/physx && \
+    rm -Rf $HOME/git/PhysX
+ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$HOME/opt/physx3.4/lib"
 
 # copy rai-python
 RUN mkdir -p $HOME/git/rai-python
 ADD . $HOME/git/rai-python/
 RUN ls -l $HOME/git/rai-python/
 RUN du -hs $HOME/git/rai-python/*
-
-# TODO to be removed
 RUN ls -l $HOME/git/rai-python/rai
 RUN du -hs $HOME/git/rai-python/rai/*
 

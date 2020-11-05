@@ -12,7 +12,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1 # checks out triggering branch, v1 checks out submodules as well
+      - uses: actions/checkout@v1 # checks out triggering branch
+        with:
+          submodules: true # check out submodules as well
 
       - name: Build rai-python docker image
         run: |

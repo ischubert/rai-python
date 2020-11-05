@@ -22,7 +22,7 @@ jobs:
       
       - name: Test rai-python docker image
         run: |
-          docker run $IMAGE_NAME bash -c "cd /root/git/rai-python && pytest"
+          docker run $IMAGE_NAME bash -c "cd /root/git/rai-python/ && pytest"
       
       - name: Log into registry (docker.pkg.github.com)
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin

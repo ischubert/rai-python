@@ -47,7 +47,7 @@ ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$HOME/opt/physx3.4/lib"
 RUN mkdir -p $HOME/git/rai-python
 ADD . $HOME/git/rai-python/
 RUN ls -l $HOME/git/rai-python/
-RUN du -hs $HOME/git/rai-python/
+RUN du -hs $HOME/git/rai-python/*
 
 # install rai-python
 RUN cd rai-python && \

@@ -1,4 +1,4 @@
-# Using tf-gpu image as base having Deep RL applications in mind
+# Using tf-gpu image as base for Deep RL applications of rai-python
 FROM tensorflow/tensorflow:latest-gpu
 # Digest:sha256:37c7db66cc96481ac1ec43af2856ef65d3e664fd7f5df6b5e54855149f7f8594
 
@@ -32,7 +32,6 @@ RUN git clone https://github.com/NVIDIAGameWorks/PhysX.git && \
     git checkout 3.4 && \
     cd PhysX_3.4/Source/compiler/linux64 && \
     make release
-
 RUN mkdir -p $HOME/opt/physx3.4/lib && \
     mkdir -p $HOME/opt/physx3.4/include/physx && \
     cd $HOME/git/PhysX && \
@@ -42,16 +41,19 @@ RUN mkdir -p $HOME/opt/physx3.4/lib && \
     cp -R PhysX_3.4/Include/* $HOME/opt/physx3.4/include/physx &&\
     cp -R PxShared/include/* $HOME/opt/physx3.4/include/physx && \
     rm -Rf $HOME/git/PhysX
+ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$HOME/opt/physx3.4/lib"
+
+# copy rai-python
+RUN mkdir -p $HOME/git/rai-python
+ADD . $HOME/git/rai-python/
+RUN ls -l $HOME/git/rai-python/
+RUN du -hs $HOME/git/rai-python/*
+RUN ls -l $HOME/git/rai-python/rai
+RUN du -hs $HOME/git/rai-python/rai/*
 
 # install rai-python
-RUN git clone https://github.com/ischubert/rai-python.git && \
-    cd rai-python && \
-    git checkout $GITHUB_SHA && \
-    git config --file=.gitmodules submodule.rai.url https://github.com/MarcToussaint/rai.git && \
-    git config --file=.gitmodules submodule.rai-robotModels.url https://github.com/MarcToussaint/rai-robotModels.git && \
-    git submodule init && \
-    git submodule update
-RUN export TERM=xterm
+RUN cd rai-python && \
+    make cleanAll
 RUN cd rai-python && \
     yes | make installUbuntuAll
 RUN cd rai-python && \
@@ -59,3 +61,6 @@ RUN cd rai-python && \
 
 # install pytest
 RUN pip install flake8 pytest
+
+RUN cd rai-python && \
+    git log -1

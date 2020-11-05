@@ -52,6 +52,7 @@ CORE
 nogit*
 *~
 z.*
+!z.push.g
 z/
 rai.log
 .#*#

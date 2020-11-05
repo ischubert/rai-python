@@ -77,5 +77,3 @@ def test_libry():
         tau = .01
         for __ in range(0, 100):
             var_sim.step(np.array([1., 1., 1., 0., 0., 0., 0.]), tau)
-
-    assert False
